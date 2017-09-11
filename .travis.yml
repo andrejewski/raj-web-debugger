@@ -1,3 +1,12 @@
 language: node_js
 node_js:
 - node
+deploy:
+  provider: npm
+  email: christopher.andrejewski@gmail.com
+  api_key:
+    secure: Pr8f4RZF8F5C+jVk7GV7rRgkngCkqFPCop4m8HQP9IkvE4d5jFSyTOJfv+L7OQTBljKDvcor9kO85wFScpyjTwG7+N2N15J/KtR/ybemoTNeZuGg1M3CFTMEYts04SHkw7ew5wXewGdIqpmXDAL8aIzMf2n6gbY/4szIkYwHmhorjF5KF6tE/RM3p54n5cx01hHJEHCSqS191hcGbkDpjpE1neSxowU6YmyoOuHXBQwmWkmf1Ayu929/U+4zGT/aRAGti2p8z5cBA771hNPdyyfFTrKYnKhae6ZLwDMat+3viPwM99E9U/uYnX9snFaghorvHjdFPZLI1ILYDU0fdj1tMql9kk1V9l0NJnQbQs1V1Rbd1U/Ff5WQgn7nC+xSAeqDSw0l5tnPjnjQkBrBIzozL3DIjU4rsRLOHKomnhc7RU/A5m3t15ALQVfQlBLCERquyp8u2Zf1R2JUDceP0Wn/Sb+SGZCborhkFzc9VOtw8Zf11yU25AJBti585W1KkLg0hI6107QU3bIWJ8FzG6rUJSBnAAAyArJEUz3ou9oLAk32RETjATj4HBnCtXA76JGCimpUD5+BNK1SF4pZQbniFDUBLv9SX7xj4BU9HX2QAtEJcRXau/5+jaXdo3O7edWn4x6a/EfwKYt+H2synPguC3EYCFPnCCYokd2gQvU=
+  on:
+    tags: true
+    repo: andrejewski/raj-web-debugger
+  skip_cleanup: true
