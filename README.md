@@ -10,7 +10,11 @@ npm install raj-web-debugger
 [![Greenkeeper badge](https://badges.greenkeeper.io/andrejewski/raj-web-debugger.svg)](https://greenkeeper.io/)
 
 ## Demo
-[![Embed/Debugger view](assets/demo-screenshot.png)](https://vimeo.com/233257980)
+
+<a href='https://vimeo.com/233257980'>
+  <img title='Embed/Debugger view' alt='Embed/Debugger view' src='assets/demo-screenshot.png' width='500' />
+</a>
+
 *Click image for video demonstration.*
 
 ## Usage
