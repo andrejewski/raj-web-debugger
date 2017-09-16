@@ -1,5 +1,5 @@
-# Raj SPA
-> Single Page Apps for [Raj](https://github.com/andrejewski/raj)
+# Raj Web Deubgger
+> Web debugger for [Raj](https://github.com/andrejewski/raj)
 
 ```sh
 npm install raj-web-debugger
