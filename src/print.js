@@ -1,5 +1,6 @@
 function isTagmeme (msg) {
   return (
+    msg &&
     typeof msg.constructor.is === 'function' &&
     typeof msg.constructor.unwrap === 'function' &&
     msg.args.toString() === '[object Arguments]'
