@@ -1,26 +1,18 @@
-const tag = require('tagmeme')
+const {union} = require('tagmeme')
 const {mapEffect, batchEffects} = require('raj-compose')
 const {embedStyle, debuggerStyle} = require('./style')
 const {getMessageTitle, getPrettyValue} = require('./print')
 const frame = require('./frame')
 
-const GetContainer = tag()
-const GetWindow = tag()
-const OpenDebugger = tag()
-const ClosedWindow = tag()
-const ProgramMsg = tag()
-const HistoryUp = tag()
-const HistoryDown = tag()
-const HistoryGoTo = tag()
-const Msg = tag.union([
-  GetContainer,
-  GetWindow,
-  OpenDebugger,
-  ClosedWindow,
-  ProgramMsg,
-  HistoryUp,
-  HistoryDown,
-  HistoryGoTo
+const Msg = union([
+  'GetContainer',
+  'GetWindow',
+  'OpenDebugger',
+  'ClosedWindow',
+  'ProgramMsg',
+  'HistoryUp',
+  'HistoryDown',
+  'HistoryGoTo'
 ])
 
 function debuggerEmbedView (model, dispatch) {
@@ -32,7 +24,7 @@ function debuggerEmbedView (model, dispatch) {
     <style>${embedStyle}</style>
     <span>Debugger</span>
   `
-  html.onclick = () => dispatch(OpenDebugger())
+  html.onclick = () => dispatch(Msg.OpenDebugger())
   return html
 }
 
@@ -90,7 +82,7 @@ function debuggerWindowView (model, dispatch) {
       if (historyIndex) {
         historyIndex = parseInt(historyIndex, 10)
       }
-      dispatch(HistoryGoTo(historyIndex))
+      dispatch(Msg.HistoryGoTo(historyIndex))
     }
   }
   model.window.onkeydown = event => {
@@ -100,11 +92,11 @@ function debuggerWindowView (model, dispatch) {
     }
     const isUp = event.keyCode === 74 // j
     if (isUp) {
-      dispatch(HistoryDown())
+      dispatch(Msg.HistoryDown())
     }
     const isDown = event.keyCode === 75 // k
     if (isDown) {
-      dispatch(HistoryUp())
+      dispatch(Msg.HistoryUp())
     }
   }
   return html
@@ -152,27 +144,27 @@ module.exports = function webDebugger (program, debuggerName) {
     container: null,
     window: null
   }, batchEffects([
-    frame.getContainerElement(GetContainer),
-    mapEffect(programEffect, ProgramMsg)
+    frame.getContainerElement(Msg.GetContainer),
+    mapEffect(programEffect, Msg.ProgramMsg)
   ])]
 
   function update (msg, model) {
-    return Msg.match(msg, [
-      GetContainer, container => [{...model, container}],
-      GetWindow, window => [{...model, window}],
-      OpenDebugger, () => [model, frame.openWindow({
+    return Msg.match(msg, {
+      GetContainer: container => [{...model, container}],
+      GetWindow: window => [{...model, window}],
+      OpenDebugger: () => [model, frame.openWindow({
         title: 'Debugger',
         width: 960,
         height: 480,
-        openMsg: GetWindow,
-        closeMsg: ClosedWindow
+        openMsg: Msg.GetWindow,
+        closeMsg: Msg.ClosedWindow
       })],
-      ClosedWindow, () => [{
+      ClosedWindow: () => [{
         ...model,
         window: undefined,
         historyIndex: null
       }],
-      ProgramMsg, msg => {
+      ProgramMsg: msg => {
         const newestModel = model.history[model.history.length - 1].model
         const [programModel, programEffect] = program.update(msg, newestModel)
         const historyEntry = {
@@ -182,9 +174,9 @@ module.exports = function webDebugger (program, debuggerName) {
         return [{
           ...model,
           history: [...model.history, historyEntry]
-        }, mapEffect(programEffect, ProgramMsg)]
+        }, mapEffect(programEffect, Msg.ProgramMsg)]
       },
-      HistoryUp, () => {
+      HistoryUp: () => {
         const currentIndex = model.historyIndex
         const nextIndex = currentIndex === null
           ? null
@@ -193,15 +185,15 @@ module.exports = function webDebugger (program, debuggerName) {
             : currentIndex + 1
         return [{...model, historyIndex: nextIndex}]
       },
-      HistoryDown, () => {
+      HistoryDown: () => {
         const currentIndex = model.historyIndex
         const previousIndex = currentIndex === null
           ? model.history.length - 1
           : Math.max(0, currentIndex - 1)
         return [{...model, historyIndex: previousIndex}]
       },
-      HistoryGoTo, historyIndex => [{...model, historyIndex}]
-    ])
+      HistoryGoTo: historyIndex => [{...model, historyIndex}]
+    })
   }
 
   function view (model, dispatch) {
@@ -210,7 +202,7 @@ module.exports = function webDebugger (program, debuggerName) {
     const isLive = model.historyIndex === null
     if (isLive) {
       const newestModel = model.history[model.history.length - 1].model
-      return program.view(newestModel, x => dispatch(ProgramMsg(x)))
+      return program.view(newestModel, x => dispatch(Msg.ProgramMsg(x)))
     }
 
     const currentModel = model.history[model.historyIndex].model
