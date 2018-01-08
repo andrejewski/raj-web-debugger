@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "raj-compose": "0.0.4",
-    "tagmeme": "0.0.5"
+    "tagmeme": "0.0.6"
   },
   "devDependencies": {
     "ava": "^0.24.0",
