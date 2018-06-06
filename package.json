@@ -13,7 +13,7 @@
     "url": "https://github.com/andrejewski/raj-web-debugger/issues"
   },
   "dependencies": {
-    "raj-compose": "0.0.6",
+    "raj-compose": "0.0.7",
     "tagmeme": "0.0.7"
   },
   "devDependencies": {
